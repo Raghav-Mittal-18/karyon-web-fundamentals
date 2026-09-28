@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kāryon — Project Execution, Centralized</title>
+  <meta name="description" content="Kāryon is a centralized workspace for projects, teams, tasks, sprints, collaboration, files, and analytics.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="public/Favicon.png">
+</head>
+<body>
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a class="brand" href="/" aria-label="Kāryon home">
+        <img src="public/Logo7.png" alt="Kāryon logo" class="brand-mark">
+        <span class="brand-sub">Project Labs</span>
+      </a>
+
+      <div class="nav-links" aria-label="Primary navigation links">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#security">Control</a>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn btn-ghost" id="nav-login-btn" type="button">Login</button>
+        <button class="btn btn-solid" id="nav-signup-btn" type="button">Get Started</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top" aria-label="Kāryon hero section">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-ghost-word" aria-hidden="true">KĀRYON</div>
+
+      <div class="container hero-grid">
+        <div class="hero-copy reveal in-view">
+          <span class="eyebrow">Project Execution, Centralized</span>
+          <h1 class="hero-title">One workspace for <span class="accent-word">every</span> moving part</h1>
+          <p class="hero-sub">Kāryon brings projects, teams, tasks, sprints, files, and conversation into a single system of record — so work stops living in seven different tabs.</p>
+
+          <div class="hero-cta">
+            <button class="btn btn-solid" id="hero-signup-btn" type="button">Start Project</button>
+            <button class="btn btn-outline" id="hero-archive-btn" type="button">View Archive</button>
+          </div>
+        </div>
+
+        <div class="hero-panel reveal in-view" aria-label="Kāryon workspace status">
+          <span class="eyebrow">Workspace Status</span>
+          <div class="hero-stat"><span id="stat-projects">0</span></div>
+          <div class="hero-stat-label">Active Projects</div>
+          <div class="hero-divider"></div>
+          <div class="hero-stat"><span id="stat-tasks">0</span><span class="accent-word">+</span></div>
+          <div class="hero-stat-label">Tasks Tracked</div>
+          <div class="hero-divider"></div>
+          <div class="hero-status-row">
+            <span class="eyebrow muted"><span class="hero-status-dot"></span>Live Workspace</span>
+            <span class="eyebrow muted">Est. 2026</span>
+          </div>
+        </div>
+      </div>
+      
+    </section>
+
+    <section class="section trust-section" id="inspiration">
+      <div class="container trust-inner reveal">
+        <span class="eyebrow">Work should move forward.</span>
+        <h2>Projects. People. Tasks. Execution.</h2>
+        <p>All connected in one workspace.</p>
+      </div>
+    </section>
+
+    <section class="section problem-section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">The problem</span>
+          <h2>Stop managing work across disconnected tools.</h2>
+          <p>Projects, tasks, teams, files, communication and progress should not live across scattered tabs and disconnected systems.</p>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-panel comparison-panel-left reveal">
+            <div class="panel-kicker">Without Kāryon</div>
+            <div class="spoke-list" aria-label="Disconnected systems">
+              <span>Projects</span>
+              <span>Tasks</span>
+              <span>Email</span>
+              <span>Files</span>
+              <span>Messages</span>
+              <span>Spreadsheets</span>
+              <span>Meetings</span>
+            </div>
+            <div class="spoke-lines" aria-hidden="true"></div>
+          </div>
+
+          <div class="comparison-panel comparison-panel-right reveal">
+            <div class="panel-kicker">With Kāryon</div>
+            <div class="central-node" aria-label="Centralized workspace">
+              <div class="central-node-title">Kāryon</div>
+              <div class="workspace-grid">
+                <span>Projects</span>
+                <span>Tasks</span>
+                <span>Teams</span>
+                <span>Sprints</span>
+                <span>Files</span>
+                <span>Analytics</span>
+                <span>Collaboration</span>
+                <span>Notifications</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section product-preview-section" id="product-preview">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">See Kāryon in action</span>
+          <h2>Everything your team needs to execute.</h2>
+        </div>
+
+        <div class="product-preview reveal" aria-label="Kāryon dashboard preview">
+          <aside class="preview-sidebar">
+            <div class="preview-brand">
+              <span class="brand-mark small">K</span>
+              <span>Kāryon</span>
+            </div>
+            <nav class="preview-nav" aria-label="Dashboard menu preview">
+              <a class="active" href="#product-preview">Dashboard</a>
+              <a href="#product-preview">Projects</a>
+              <a href="#product-preview">Tasks</a>
+              <a href="#product-preview">Sprints</a>
+              <a href="#product-preview">Teams</a>
+              <a href="#product-preview">Analytics</a>
+            </nav>
+          </aside>
+
+          <div class="preview-main">
+            <header class="preview-header">
+              <div>
+                <span class="eyebrow subtle">Portfolio</span>
+                <h3>Website Redesign</h3>
+              </div>
+              <span class="status-pill">Live</span>
+            </header>
+
+            <div class="preview-summary">
+              <div>
+                <div class="project-progress-label">Progress</div>
+                <div class="project-progress-number">78% complete</div>
+              </div>
+              <div class="progress-bar"><span></span></div>
+            </div>
+
+            <div class="stats-row">
+              <div class="stat-box">
+                <span class="stat-label">Tasks</span>
+                <strong>24</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Completed</span>
+                <strong>18</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Remaining</span>
+                <strong>6</strong>
+              </div>
+            </div>
+
+            <div class="kanban-board" aria-label="Kanban board preview">
+              <div class="kanban-column">
+                <span class="column-label">To Do</span>
+                <div class="task-card">
+                  <span class="task-tag">UX</span>
+                  <strong>Homepage wireframes</strong>
+                  <small>Due today</small>
+                </div>
+              </div>
+              <div class="kanban-column">
+                <span class="column-label">In Progress</span>
+                <div class="task-card accent-card">
+                  <span class="task-tag">UI</span>
+                  <strong>Design system refresh</strong>
+                  <small>4 team members</small>
+                </div>
+              </div>
+              <div class="kanban-column">
+                <span class="column-label">Code Review</span>
+                <div class="task-card">
+                  <span class="task-tag">Dev</span>
+                  <strong>Navigation update</strong>
+                  <small>2 comments</small>
+                </div>
+              </div>
+              <div class="kanban-column">
+                <span class="column-label">Testing</span>
+                <div class="task-card">
+                  <span class="task-tag">QA</span>
+                  <strong>Accessibility pass</strong>
+                  <small>1 blocker</small>
+                </div>
+              </div>
+              <div class="kanban-column">
+                <span class="column-label">Completed</span>
+                <div class="task-card done-card">
+                  <span class="task-tag">Done</span>
+                  <strong>Content audit</strong>
+                  <small>Approved</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-bottom-row">
+              <div class="team-panel">
+                <div class="panel-title">Team</div>
+                <div class="avatar-row">
+                  <span class="team-avatar a1">A</span>
+                  <span class="team-avatar a2">D</span>
+                  <span class="team-avatar a3">P</span>
+                  <span class="team-avatar a4">M</span>
+                </div>
+              </div>
+
+              <div class="chart-panel">
+                <div class="panel-title">Sprint</div>
+                <svg viewBox="0 0 220 90" class="chart-svg" aria-label="Progress chart">
+                  <path d="M0 70 C 40 60, 60 52, 90 58 S 150 28, 220 18 L220 90 L0 90 Z" class="svg-fill"></path>
+                  <path d="M0 70 C 40 60, 60 52, 90 58 S 150 28, 220 18" class="svg-line"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section features-section" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Nine systems. One workspace.</span>
+          <h2>Everything that moves work.</h2>
+          <p>Every part of execution — from the first task to the final sprint report — lives in the same place, referencing the same data.</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card reveal">
+            <span class="fnum">01</span>
+            <h3>Projects</h3>
+            <p>Scope work with descriptions, timelines, ownership, and a defined team.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="fnum">02</span>
+            <h3>Teams</h3>
+            <p>Keep structure clear with accountable roles and shared visibility.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="fnum">03</span>
+            <h3>Tasks</h3>
+            <p>Track priorities, deadlines, status and handoff in a single source of truth.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="fnum">04</span>
+            <h3>Kanban</h3>
+            <p>Move work across clear execution stages without losing context.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="fnum">05</span>
+            <h3>Sprints</h3>
+            <p>Bundle effort into focused delivery cycles with visible progress.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="fnum">06</span>
+            <h3>Collaboration</h3>
+            <p>Keep discussion, decisions and follow-up connected to the actual work.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="fnum">07</span>
+            <h3>Notifications</h3>
+            <p>Surface assignment changes, comments and deadlines before they slip.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="fnum">08</span>
+            <h3>Files</h3>
+            <p>Attach deliverables and docs to the project or task that depends on them.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="fnum">09</span>
+            <h3>Analytics</h3>
+            <p>Turn project movement into operational clarity for teams and leaders.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section workflow-section" id="workflow">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Task lifecycle</span>
+          <h2>From idea to execution.</h2>
+          <p>Every task follows a visible lifecycle, so everyone knows what needs attention and what "done" means.</p>
+        </div>
+
+        <div class="workflow-rail reveal" aria-label="Task lifecycle">
+          <div class="workflow-track"></div>
+          <div class="workflow-step active">
+            <span class="wnum">01</span>
+            <div class="wname">To Do</div>
+          </div>
+          <div class="workflow-step">
+            <span class="wnum">02</span>
+            <div class="wname">In Progress</div>
+          </div>
+          <div class="workflow-step">
+            <span class="wnum">03</span>
+            <div class="wname">Code Review</div>
+          </div>
+          <div class="workflow-step">
+            <span class="wnum">04</span>
+            <div class="wname">Testing</div>
+          </div>
+          <div class="workflow-step">
+            <span class="wnum">05</span>
+            <div class="wname">Completed</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section roles-section" id="roles">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">One workspace. Every role.</span>
+          <h2>Built for the people driving execution.</h2>
+        </div>
+
+        <div class="roles-grid">
+          <article class="role-card reveal pm-card">
+            <span class="role-pill">Project Manager</span>
+            <h3>Track</h3>
+            <ul>
+              <li>Projects</li>
+              <li>Teams</li>
+              <li>Analytics</li>
+              <li>Sprints</li>
+            </ul>
+            <p>Track project health, deadlines, workload and execution from one place.</p>
+          </article>
+
+          <article class="role-card reveal dev-card">
+            <span class="role-pill">Developer</span>
+            <h3>Track</h3>
+            <ul>
+              <li>Tasks</li>
+              <li>Kanban</li>
+              <li>Sprints</li>
+              <li>Collaboration</li>
+            </ul>
+            <p>Know what to build, what comes next and what needs attention.</p>
+          </article>
+
+          <article class="role-card reveal qa-card">
+            <span class="role-pill">QA</span>
+            <h3>Track</h3>
+            <ul>
+              <li>Tasks</li>
+              <li>Testing</li>
+              <li>Files</li>
+              <li>Collaboration</li>
+            </ul>
+            <p>Move work through review and testing without losing context.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section analytics-section" id="analytics">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Know what's moving.</span>
+          <h2>Know what's stuck.</h2>
+          <p>Kāryon turns project activity into a clear operational picture.</p>
+        </div>
+
+        <div class="analytics-shell reveal">
+          <div class="analytics-topline">
+            <div class="metric-card">
+              <span>Active Projects</span>
+              <strong>12</strong>
+            </div>
+            <div class="metric-card">
+              <span>Tasks</span>
+              <strong>184</strong>
+            </div>
+            <div class="metric-card">
+              <span>Completion</span>
+              <strong>78%</strong>
+            </div>
+          </div>
+
+          <div class="analytics-grid">
+            <div class="analytics-panel chart-panel-large">
+              <div class="panel-title-row">
+                <span class="panel-title">Task Completion</span>
+                <span class="panel-metric">78%</span>
+              </div>
+              <svg viewBox="0 0 280 120" class="bars-svg" aria-label="Task completion chart">
+                <g>
+                  <rect x="20" y="52" width="24" height="48" rx="4"></rect>
+                  <rect x="62" y="40" width="24" height="60" rx="4"></rect>
+                  <rect x="104" y="30" width="24" height="70" rx="4"></rect>
+                  <rect x="146" y="18" width="24" height="82" rx="4"></rect>
+                  <rect x="188" y="26" width="24" height="74" rx="4"></rect>
+                  <rect x="230" y="14" width="24" height="86" rx="4"></rect>
+                </g>
+              </svg>
+            </div>
+
+            <div class="analytics-panel chart-panel-small">
+              <div class="panel-title-row">
+                <span class="panel-title">Team Throughput</span>
+                <span class="panel-metric">+18%</span>
+              </div>
+              <svg viewBox="0 0 240 120" class="line-svg" aria-label="Team throughput chart">
+                <path d="M0 95 C 30 82, 60 68, 90 70 S 150 48, 210 35"></path>
+                <circle cx="210" cy="35" r="4"></circle>
+              </svg>
+            </div>
+          </div>
+
+          <div class="analytics-progress-panel">
+            <div class="panel-title-row">
+              <span class="panel-title">Project progress</span>
+              <span class="panel-metric">6/8 active</span>
+            </div>
+            <div class="project-bars">
+              <div><span>Portal Refresh</span><i style="--w: 82%"></i></div>
+              <div><span>API Upgrade</span><i style="--w: 71%"></i></div>
+              <div><span>QA Sweep</span><i style="--w: 64%"></i></div>
+            </div>
+          </div>
+
+          <p class="analytics-caption">Execution visibility without the spreadsheet.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section security-section" id="security">
+      <div class="container narrow-layout reveal">
+        <div class="section-head reveal">
+          <span class="eyebrow">Security &amp; control</span>
+          <h2>Your workspace. Your data. Your control.</h2>
+        </div>
+        <div class="security-list">
+          <span>✓ Secure authentication</span>
+          <span>✓ Role-based access</span>
+          <span>✓ Project-level organization</span>
+          <span>✓ Centralized workspace data</span>
+          <span>✓ Controlled collaboration</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section philosophy-section" id="philosophy">
+      <div class="container philosophy-inner reveal">
+        <div class="karyon-word">KĀRYON</div>
+        <p class="philosophy-line">Work should move forward.</p>
+        <p class="philosophy-line muted">Not sideways.<br>Not between seven different tools.<br>Not buried inside conversations.</p>
+        <p class="philosophy-callout">Forward.</p>
+        <p class="philosophy-text">Kāryon is built around one idea: execution should be visible.</p>
+      </div>
+    </section>
+
+    <section class="section final-cta-section" id="final-cta">
+      <div class="container final-cta reveal">
+        <span class="eyebrow">Ready to execute?</span>
+        <h2>Bring your entire workflow into one workspace.</h2>
+        <p>Projects, teams, tasks, communication and execution — connected through Kāryon.</p>
+        <div class="final-cta-actions">
+          <button class="btn btn-solid" id="final-signup-btn" type="button">Get Started</button>
+          <button class="btn btn-outline" id="explore-workflow-btn" type="button">Explore Workflow</button>
+        </div>
+        <p class="final-support">No scattered tasks.<br>No lost context.<br>No seven-tab workflow.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo" aria-label="Kāryon home">
+            <img src="public/Logo7.png" alt="Kāryon logo">
+          </a>
+          <p class="footer-tagline">One workspace for projects, teams, tasks, and everything in between.</p>
+          <div class="footer-status">
+            <span class="footer-status-dot"></span>
+            <span>Platform operational</span>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#product-preview">Projects</a>
+          <a href="#product-preview">Tasks</a>
+          <a href="#workflow">Kanban</a>
+          <a href="#analytics">Analytics</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>Platform</h4>
+          <a href="#workflow">How Kāryon Works</a>
+          <a href="#roles">Teams</a>
+          <a href="#features">Collaboration</a>
+          <a href="#features">Notifications</a>
+          <a href="#features">Files</a>
+          <a href="#workflow">Sprints</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="#features">Documentation</a>
+          <a href="#workflow">Help Center</a>
+          <a href="#inspiration">Getting Started</a>
+          <a href="#workflow">Release Notes</a>
+          <a href="#final-cta">Contact Support</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>Company</h4>
+          <a href="#philosophy">About Kāryon</a>
+          <a href="#inspiration">Our Vision</a>
+          <a href="#final-cta">Careers</a>
+          <a href="#final-cta">Contact</a>
+        </div>
+      </div>
+
+      <div class="footer-cta">
+        <div>
+          <span class="eyebrow">Ready to execute?</span>
+          <h3>Bring your entire workflow into one workspace.</h3>
+        </div>
+        <button class="btn btn-solid" id="footer-signup-btn" type="button">Get Started</button>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copyright">
+          <span>© 2026 Kāryon Project Labs.</span>
+          <span>Built for execution.</span>
+        </div>
+
+        <div class="footer-legal">
+          <a href="#security">Privacy</a>
+          <a href="#features">Terms</a>
+          <a href="#security">Security</a>
+          <a href="#workflow">Status</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="login-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+      <div class="modal-head">
+        <h3 id="login-title">Log In</h3>
+        <button class="modal-close" data-close-modal type="button" aria-label="Close login modal">&times;</button>
+      </div>
+      <div id="login-error"></div>
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" autocomplete="email">
+          <div class="field-error" id="err-login-email"></div>
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" autocomplete="current-password">
+          <div class="field-error" id="err-login-password"></div>
+        </div>
+        <button type="submit" class="btn btn-solid btn-block">Log In</button>
+      </form>
+      <div class="modal-switch">No account yet? <a href="#" id="switch-to-signup">Get started</a></div>
+      <div class="modal-hint">Demo login — demo@karyon.app / demo1234</div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="signup-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="signup-title">
+      <div class="modal-head">
+        <h3 id="signup-title">Create Account</h3>
+        <button class="modal-close" data-close-modal type="button" aria-label="Close signup modal">&times;</button>
+      </div>
+      <div id="signup-error"></div>
+      <form id="signup-form" novalidate>
+        <div class="field">
+          <label for="signup-name">Full name</label>
+          <input type="text" id="signup-name" autocomplete="name">
+          <div class="field-error" id="err-signup-name"></div>
+        </div>
+        <div class="field">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" autocomplete="email">
+          <div class="field-error" id="err-signup-email"></div>
+        </div>
+        <div class="field">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" autocomplete="new-password">
+          <div class="field-error" id="err-signup-password"></div>
+        </div>
+        <div class="field">
+          <label for="signup-org">Organization</label>
+          <input type="text" id="signup-org" placeholder="e.g. Northlight Studio">
+          <div class="field-error" id="err-signup-org"></div>
+        </div>
+        <div class="field">
+          <label for="signup-role">Role</label>
+          <select id="signup-role">
+            <option value="">Choose a role</option>
+            <option value="Project Manager">Project Manager</option>
+            <option value="Developer">Developer</option>
+            <option value="QA">QA</option>
+          </select>
+          <div class="field-error" id="err-signup-role"></div>
+        </div>
+        <button type="submit" class="btn btn-solid btn-block">Create Account</button>
+      </form>
+      <div class="modal-switch">Already have an account? <a href="#" id="switch-to-login">Log in</a></div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>
