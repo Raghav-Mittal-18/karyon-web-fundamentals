@@ -35,82 +35,226 @@ function initNavbarScroll() {
   window.addEventListener('scroll', apply, { passive: true });
 }
 
-/* ---------------- THREE.JS HERO ---------------- */
+
+/* ---------------- NATIVE CANVAS HERO ---------------- */
 function initThreeHero() {
   const canvas = document.getElementById('hero-canvas');
-  if (!canvas || typeof THREE === 'undefined') return;
+  if (!canvas) return;
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(55, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
-  camera.position.set(0, 0, 9);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
-  function resize() {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    renderer.setSize(w, h, false);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-  }
+  let width = 0;
+  let height = 0;
+  let animationId;
 
-  window.addEventListener('resize', resize);
-  resize();
-
-  const geo = new THREE.IcosahedronGeometry(3.1, 1);
-  const mat = new THREE.MeshBasicMaterial({ color: 0xe2712e, wireframe: true, transparent: true, opacity: 0.5 });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(2.4, 0.4, 0);
-  scene.add(mesh);
-
-  const geo2 = new THREE.IcosahedronGeometry(2.2, 0);
-  const mat2 = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.06 });
-  const mesh2 = new THREE.Mesh(geo2, mat2);
-  mesh2.position.copy(mesh.position);
-  scene.add(mesh2);
-
+  const particles = [];
   const particleCount = 140;
-  const positions = new Float32Array(particleCount * 3);
-  for (let i = 0; i < particleCount; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 16;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 9;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 6 - 2;
-  }
-  const particleGeo = new THREE.BufferGeometry();
-  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particleMat = new THREE.PointsMaterial({ color: 0xff8a3d, size: 0.035, transparent: true, opacity: 0.55 });
-  const particles = new THREE.Points(particleGeo, particleMat);
-  scene.add(particles);
 
-  let targetRotY = 0;
   let mouseX = 0;
   let mouseY = 0;
+  let rotation = 0;
 
-  window.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-    targetRotY = mouseX * 0.25;
-  });
+  const reduceMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
 
-  function animate() {
-    if (!reduceMotion) {
-      mesh.rotation.y += 0.0018;
-      mesh.rotation.x += 0.0008;
-      mesh2.rotation.y -= 0.001;
-      mesh2.rotation.x += 0.0006;
-      particles.rotation.y += 0.0004;
+    width = rect.width;
+    height = rect.height;
 
-      mesh.rotation.y += (targetRotY - mesh.rotation.y) * 0.01;
-      camera.position.x += (mouseX * 0.6 - camera.position.x) * 0.02;
-      camera.position.y += (-mouseY * 0.3 - camera.position.y) * 0.02;
-      camera.lookAt(0, 0, 0);
-    }
-    renderer.render(scene, camera);
-    requestAnimationFrame(animate);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  animate();
+  function createParticles() {
+    particles.length = 0;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random(),
+        y: Math.random(),
+        z: Math.random(),
+        size: Math.random() * 1.8 + 0.5,
+        speed: Math.random() * 0.0008 + 0.0003
+      });
+    }
+  }
+
+  function drawParticles() {
+    particles.forEach((particle) => {
+      particle.y -= particle.speed;
+
+      if (particle.y < 0) {
+        particle.y = 1;
+        particle.x = Math.random();
+        particle.z = Math.random();
+      }
+
+      const x = particle.x * width;
+      const y = particle.y * height;
+
+      const alpha = 0.2 + particle.z * 0.5;
+
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255, 138, 61, ${alpha})`;
+      ctx.arc(x, y, particle.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function drawWireframe() {
+    const centerX = width * 0.72;
+    const centerY = height * 0.5;
+
+    const radius = Math.min(width, height) * 0.28;
+
+    const sides = 10;
+    const points = [];
+
+    for (let i = 0; i < sides; i++) {
+      const angle =
+        (i / sides) * Math.PI * 2 +
+        rotation;
+
+      const depth =
+        Math.sin(angle) * 0.5 + 0.5;
+
+      const x =
+        centerX +
+        Math.cos(angle) * radius * (0.7 + depth * 0.3);
+
+      const y =
+        centerY +
+        Math.sin(angle) * radius;
+
+      points.push({
+        x,
+        y,
+        depth
+      });
+    }
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(226, 113, 46, 0.5)';
+
+    for (let i = 0; i < points.length; i++) {
+      const current = points[i];
+      const next = points[(i + 1) % points.length];
+
+      ctx.beginPath();
+      ctx.moveTo(current.x, current.y);
+      ctx.lineTo(next.x, next.y);
+      ctx.stroke();
+    }
+
+    for (let i = 0; i < points.length; i++) {
+      const current = points[i];
+
+      for (let j = i + 2; j < points.length; j++) {
+        const next = points[j];
+
+        if (Math.random() > 0.35) continue;
+
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(226, 113, 46, ${
+          0.08 + current.depth * 0.12
+        })`;
+
+        ctx.moveTo(current.x, current.y);
+        ctx.lineTo(next.x, next.y);
+        ctx.stroke();
+      }
+    }
+
+    // Inner geometric shape
+    const innerRadius = radius * 0.55;
+
+    ctx.beginPath();
+
+    for (let i = 0; i <= sides; i++) {
+      const angle =
+        (i / sides) * Math.PI * 2 -
+        rotation * 1.3;
+
+      const x =
+        centerX +
+        Math.cos(angle) * innerRadius;
+
+      const y =
+        centerY +
+        Math.sin(angle) * innerRadius;
+
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+
+    ctx.closePath();
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.stroke();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    drawParticles();
+    drawWireframe();
+
+    if (!reduceMotion) {
+      rotation += 0.004;
+
+      // Small mouse interaction
+      const targetX = mouseX * 0.03;
+      const targetY = mouseY * 0.03;
+
+      ctx.translate(targetX, targetY);
+      ctx.translate(-targetX, -targetY);
+
+      animationId = requestAnimationFrame(draw);
+    }
+  }
+
+  canvas.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+
+    mouseX =
+      (event.clientX - rect.left) /
+      rect.width -
+      0.5;
+
+    mouseY =
+      (event.clientY - rect.top) /
+      rect.height -
+      0.5;
+  });
+
+  window.addEventListener('resize', () => {
+    resize();
+    createParticles();
+  });
+
+  resize();
+  createParticles();
+  draw();
+
+  // Clean up animation when the page is hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      cancelAnimationFrame(animationId);
+    } else if (!reduceMotion) {
+      draw();
+    }
+  });
 }
 
 /* ---------------- SCROLL REVEAL ---------------- */
