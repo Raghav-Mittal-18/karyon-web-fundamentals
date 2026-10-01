@@ -142,6 +142,9 @@ const App = {
     document.getElementById('form-new-sprint').addEventListener('submit', (e) => this.handleNewSprint(e));
 
     // task detail modal
+    document.getElementById('td-edit-btn').addEventListener('click', () => this.openEditTaskModal());
+    document.getElementById('td-delete-btn').addEventListener('click', () => this.requestDeleteTask());
+    document.getElementById('form-edit-task').addEventListener('submit', (e) => this.handleEditTask(e));
     document.getElementById('td-status').addEventListener('change', (e) => this.handleStatusChange(e.target.value));
     document.getElementById('td-comment-submit').addEventListener('click', () => this.handleAddComment());
     document.getElementById('td-comment-input').addEventListener('keydown', (e) => {
@@ -467,9 +470,21 @@ const App = {
 
   /* ================= TASK DETAIL ================= */
   openTaskDetail(taskId) {
-    this.activeTaskId = taskId;
-    const task = DB.getTask(taskId);
-    const project = DB.getProject(task.projectId);
+  this.activeTaskId = taskId;
+
+  const task = DB.getTask(taskId);
+
+  if (!task) {
+    this.toast('Task no longer exists.');
+    return;
+  }
+
+  const project = DB.getProject(task.projectId);
+
+  if (!project) {
+    this.toast('Project no longer exists.');
+    return;
+  }
     const assignee = DB.getUserById(task.assigneeId);
 
     document.getElementById('td-category').textContent = task.category;
@@ -489,6 +504,109 @@ const App = {
   handleStatusChange(newStatus) {
     this.moveTask(this.activeTaskId, newStatus);
   },
+  openEditTaskModal() {
+  const task = DB.getTask(this.activeTaskId);
+
+  if (!task) {
+    this.toast('Task no longer exists.');
+    return;
+  }
+
+  const project = DB.getProject(task.projectId);
+
+  if (!project) {
+    this.toast('Project no longer exists.');
+    return;
+  }
+
+  document.getElementById('et-title').value = task.title || '';
+  document.getElementById('et-desc').value = task.description || '';
+  document.getElementById('et-category').value = task.category || 'Frontend';
+  document.getElementById('et-priority').value = task.priority || 'Medium';
+  document.getElementById('et-deadline').value = task.deadline || '';
+  document.getElementById('et-status').value = task.status || 'To Do';
+
+  const assigneeSelect = document.getElementById('et-assignee');
+
+  const members = project.members
+    .map(m => DB.getUserById(m.userId))
+    .filter(Boolean);
+
+  assigneeSelect.innerHTML = members
+    .map(u => `<option value="${u.id}">${escapeHtml(u.name)}</option>`)
+    .join('');
+
+  assigneeSelect.value = task.assigneeId || '';
+
+  openModal('modal-edit-task');
+},
+
+handleEditTask(e) {
+  e.preventDefault();
+
+  const tasks = DB.getTasks();
+  const task = tasks.find(t => t.id === this.activeTaskId);
+
+  if (!task) {
+    this.toast('Task no longer exists.');
+    closeAllModals();
+    return;
+  }
+
+  const oldTitle = task.title;
+
+  task.title = document.getElementById('et-title').value.trim();
+  task.description = document.getElementById('et-desc').value.trim();
+  task.category = document.getElementById('et-category').value;
+  task.priority = document.getElementById('et-priority').value;
+  task.assigneeId = document.getElementById('et-assignee').value;
+  task.deadline = document.getElementById('et-deadline').value;
+  task.status = document.getElementById('et-status').value;
+  task.updatedAt = Date.now();
+
+  if (!task.title) {
+    this.toast('Task title is required.');
+    return;
+  }
+
+  DB.saveTasks(tasks);
+
+  DB.logActivity(
+    task.projectId,
+    this.currentUser.name,
+    `updated task "${oldTitle}"`
+  );
+
+  closeAllModals();
+
+  this.toast(`Task "${task.title}" updated.`);
+
+  this.renderKanban();
+
+  this.openTaskDetail(task.id);
+
+  this.renderOverview();
+  this.renderAnalytics();
+},
+requestDeleteTask() {
+  const task = DB.getTask(this.activeTaskId);
+
+  if (!task) {
+    this.toast('Task no longer exists.');
+    return;
+  }
+
+  this.openDangerAction(
+    'Delete Task?',
+    `You are about to permanently delete "${task.title}". This action cannot be undone.`,
+    {
+      type: 'delete-task',
+      taskId: task.id,
+      projectId: task.projectId
+    }
+  );
+},
+
 
   renderComments(taskId) {
     const comments = DB.getCommentsByTask(taskId);
@@ -638,8 +756,15 @@ const App = {
     const input = document.getElementById('confirm-delete-input');
     input.value = '';
     document.getElementById('confirm-delete-button').disabled = true;
-    document.getElementById('confirm-delete-button').textContent = action.type === 'remove-member' ? 'Remove Member' : action.type === 'leave-project' ? 'Leave Project' : 'Leave Organization';
-    openModal('modal-danger-action');
+    document.getElementById('confirm-delete-button').textContent =
+  action.type === 'remove-member'
+    ? 'Remove Member'
+    : action.type === 'leave-project'
+      ? 'Leave Project'
+      : action.type === 'leave-organization'
+        ? 'Leave Organization'
+        : 'Delete Task';
+openModal('modal-danger-action');
   },
 
   confirmDangerAction() {
@@ -680,6 +805,40 @@ const App = {
       this.renderTeamList();
       this.renderOverviewAdditions(project);
       this.toast(`${removedUser.name} removed from the project.`);
+      } else if (action.type === 'delete-task') {
+  const tasks = DB.getTasks();
+  const task = tasks.find(item => item.id === action.taskId);
+
+  if (!task || task.projectId !== action.projectId) {
+    document.getElementById('danger-modal-error').textContent =
+      'This task no longer exists.';
+    return;
+  }
+
+  const taskTitle = task.title;
+
+  const updatedTasks = tasks.filter(item => item.id !== action.taskId);
+
+  DB.saveTasks(updatedTasks);
+
+  DB.logActivity(
+    action.projectId,
+    currentUser.name,
+    `deleted task "${taskTitle}"`
+  );
+
+  closeAllModals();
+
+  this.activeTaskId = null;
+
+  this.toast(`Task "${taskTitle}" deleted.`);
+
+  this.renderKanban();
+  this.renderOverview();
+  this.renderAnalytics();
+
+  this.dangerAction = null;
+  return;
     } else if (action.type === 'leave-organization') {
       const orgs = DB.getOrgs();
       const org = orgs.find(item => item.id === action.orgId);

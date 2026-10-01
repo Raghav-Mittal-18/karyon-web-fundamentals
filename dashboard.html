@@ -240,6 +240,72 @@
   </div>
 </div>
 
+<!-- Edit Task -->
+<div class="modal-overlay" id="modal-edit-task">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Edit Task</h3>
+      <button class="modal-close" data-close-modal>&times;</button>
+    </div>
+
+    <form id="form-edit-task">
+      <div class="field">
+        <label>Title</label>
+        <input type="text" id="et-title" required>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea id="et-desc"></textarea>
+      </div>
+
+      <div class="detail-grid">
+        <div class="field">
+          <label>Category</label>
+          <select id="et-category">
+            <option>Frontend</option>
+            <option>Backend</option>
+            <option>Testing</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Priority</label>
+          <select id="et-priority">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Assignee</label>
+          <select id="et-assignee"></select>
+        </div>
+
+        <div class="field">
+          <label>Deadline</label>
+          <input type="date" id="et-deadline">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select id="et-status">
+            <option>To Do</option>
+            <option>In Progress</option>
+            <option>Code Review</option>
+            <option>Testing</option>
+            <option>Completed</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-accent btn-block">
+        Save Changes
+      </button>
+    </form>
+  </div>
+</div>
 <!-- Task Detail -->
 <div class="modal-overlay" id="modal-task-detail">
   <div class="modal modal-lg">
@@ -265,7 +331,10 @@
       <div class="detail-block"><label>Deadline</label><div class="val" id="td-deadline">—</div></div>
       <div class="detail-block"><label>Created</label><div class="val" id="td-created">—</div></div>
     </div>
-
+    <div style="display:flex; gap:8px; margin:18px 0;">
+      <button class="btn btn-outline btn-sm" id="td-edit-btn">Edit Task</button>
+      <button class="btn btn-ghost btn-sm" id="td-delete-btn">Delete Task</button>
+    </div>
     <div class="panel-head" style="padding:0; border:none; margin-bottom:10px;"><h3 style="font-size:13px;">Comments</h3></div>
     <div class="comment-list" id="td-comments"></div>
     <div class="comment-input-row">
