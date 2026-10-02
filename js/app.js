@@ -437,10 +437,41 @@ const App = {
     openModal('modal-new-task');
   },
 
+    validateTaskForm(title, deadline) {
+    if (!title) {
+      this.toast('Task title is required.');
+      return false;
+    }
+
+    if (title.length < 3) {
+      this.toast('Task title must be at least 3 characters.');
+      return false;
+    }
+
+    if (deadline) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const selectedDate = new Date(`${deadline}T00:00:00`);
+
+      if (selectedDate < today) {
+        this.toast('Task deadline cannot be in the past.');
+        return false;
+      }
+    }
+
+    return true;
+  },
+
   handleNewTask(e) {
-    e.preventDefault();
-    const title = document.getElementById('nt-title').value.trim();
-    if (!title) return;
+  e.preventDefault();
+
+  const title = document.getElementById('nt-title').value.trim();
+  const deadline = document.getElementById('nt-deadline').value;
+
+  if (!this.validateTaskForm(title, deadline)) {
+    return;
+  }
     const task = {
       id: DB.uid('task'),
       projectId: this.activeProjectId,
@@ -553,21 +584,23 @@ handleEditTask(e) {
     return;
   }
 
-  const oldTitle = task.title;
+  const title = document.getElementById('et-title').value.trim();
+const deadline = document.getElementById('et-deadline').value;
 
-  task.title = document.getElementById('et-title').value.trim();
-  task.description = document.getElementById('et-desc').value.trim();
-  task.category = document.getElementById('et-category').value;
-  task.priority = document.getElementById('et-priority').value;
-  task.assigneeId = document.getElementById('et-assignee').value;
-  task.deadline = document.getElementById('et-deadline').value;
-  task.status = document.getElementById('et-status').value;
-  task.updatedAt = Date.now();
+if (!this.validateTaskForm(title, deadline)) {
+  return;
+}
 
-  if (!task.title) {
-    this.toast('Task title is required.');
-    return;
-  }
+const oldTitle = task.title;
+
+task.title = title;
+task.description = document.getElementById('et-desc').value.trim();
+task.category = document.getElementById('et-category').value;
+task.priority = document.getElementById('et-priority').value;
+task.assigneeId = document.getElementById('et-assignee').value;
+task.deadline = deadline;
+task.status = document.getElementById('et-status').value;
+task.updatedAt = Date.now();
 
   DB.saveTasks(tasks);
 
