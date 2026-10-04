@@ -262,3 +262,25 @@
   .dashboard-page .comment-input-row { align-items: stretch; flex-wrap: wrap; }
   .dashboard-page .comment-input-row input { flex-basis: 100%; }
 }
+
+
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+  .board-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .board-toolbar select {
+    flex: 1 1 150px;
+    min-width: 0;
+  }
+
+  .kanban-board {
+    overflow-x: auto;
+  }
+
+  .kanban-col {
+    min-width: 260px;
+  }
+}
