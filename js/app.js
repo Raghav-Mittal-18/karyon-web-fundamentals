@@ -397,7 +397,9 @@ const App = {
           <span class="colcount">${colTasks.length}</span>
         </div>
         <div class="kanban-col-body" data-status="${status}">
-          ${colTasks.map(t => renderTaskCard(t)).join('')}
+          ${colTasks.length
+  ? colTasks.map(t => renderTaskCard(t)).join('')
+  : '<div class="kanban-empty">No tasks here</div>'}
         </div>
       </div>`;
     }).join('');
