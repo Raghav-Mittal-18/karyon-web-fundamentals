@@ -292,3 +292,8 @@
   color: #94a3b8;
   font-size: 14px;
 }
+/* Keep long task titles readable */
+.dashboard-page .ttitle {
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
