@@ -429,10 +429,10 @@ const App = {
     if (task.assigneeId && task.assigneeId !== this.currentUser.id) {
       DB.notify(task.assigneeId, 'status', `${this.currentUser.name} moved "${task.title}" to ${newStatus}`, { view: 'task', projectId: task.projectId, taskId: task.id });
     }
-    if (newStatus === 'Completed') this.toast(`"${task.title}" marked complete.`);
+    this.toast(`"${task.title}" moved to ${newStatus}.`);
     this.renderKanban();
     this.updateBellBadge();
-  },
+  } ,
 
   openNewTaskModal() {
     document.getElementById('form-new-task').reset();
@@ -1185,6 +1185,7 @@ openModal('modal-danger-action');
       setTimeout(() => el.remove(), 300);
     }, 3400);
   }
+
 };
 
 /* ================= RENDER HELPERS ================= */
